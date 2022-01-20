@@ -98,12 +98,20 @@ void settings(const bool computer)
         playersInit(ticTacToe);
         gameMode(ticTacToe);
         gameplay(ticTacToe, computer);
+
+        for (unsigned short i = 0; i < ticTacToe->field.size; ++i)
+        {
+            delete[] ticTacToe->field.cells[i];
+        }
+        delete ticTacToe->field.cells;
+        ticTacToe->field.cells = nullptr;
     }
     else
     {
         cerr << "Error occurred while attempting allocate memory\n\n";
         system("pause");
     }
+    delete ticTacToe;
 }
 
 void playersInit(Game* ticTacToe)
