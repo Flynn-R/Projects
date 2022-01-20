@@ -1,4 +1,3 @@
-#include "consts.h"
 #include "gameplay.h"
 
 void gameplay(Game* ticTacToe, const bool computer)
