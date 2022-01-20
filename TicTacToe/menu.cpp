@@ -36,7 +36,7 @@ unsigned short menu(size_t count, ...)
     return select;
 }
 
-void selection(size_t count, const unsigned short select, va_list* str)
+void __fastcall selection(size_t count, const unsigned short select, va_list* str)
 {
     switch (count)
     {
