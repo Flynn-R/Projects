@@ -21,6 +21,6 @@ private:
     map<int, string> options;
 public:
     explicit Menu(int);
-    int selection();
+    int selection(const int&);
     ~Menu();
 };

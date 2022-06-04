@@ -19,27 +19,31 @@ Menu::~Menu()
     options.clear();
 }
 
-int Menu::selection()
+int Menu::selection(const int& numberOfPlayers)
 {
     auto current = options.begin();
     char key;
     do
     {
-        for (auto it = current; it != options.end(); ++it)
+        system("cls");
+        cout << "Blackjack" << endl << endl;
+        cout << "Number of players: " << numberOfPlayers << endl << endl;
+
+        for (auto it = options.begin(); it != options.end(); ++it)
             cout << (it == current ? "* " : "") << it->second << endl;
         key = static_cast<char>(_getch());
 
         switch (key)
         {
-            case UP:
-                if (current != options.begin())
-                    --current;
-                break;
-            case DOWN:
-                if (current != prev(options.end()))
-                    ++current;
-                break;
-            default:;
+        case UP:
+            if (current != options.begin())
+                --current;
+            break;
+        case DOWN:
+            if (current != prev(options.end()))
+                ++current;
+            break;
+        default:;
         }
     } while (key != ENTER);
 

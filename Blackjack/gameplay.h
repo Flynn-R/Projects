@@ -1,13 +1,14 @@
 #pragma once
 #include "cards.h"
+#include <algorithm>
 
 class GenericPlayer : public Hand
 {
-protected:
+public:
     string name;
 public:
     explicit GenericPlayer(string);
-    virtual bool IsHitting() = 0;
+    virtual bool IsHitting(const string&) = 0;
     bool IsBoosted();
     void Bust();
     friend ostream& operator<<(ostream&, GenericPlayer&);
@@ -22,13 +23,14 @@ public:
     void Shuffle();
     void Deal(Hand&);
     void AdditionalCards(GenericPlayer&);
+    friend void printPlayers();
 };
 
 class Player : public GenericPlayer
 {
 public:
     explicit Player(string);
-    bool IsHitting() override;
+    bool IsHitting(const string&) override;
     void Win() const;
     void Lose() const;
     void Push() const;
@@ -38,7 +40,7 @@ class House : public GenericPlayer
 {
 public:
     House();
-    bool IsHitting() override;
+    bool IsHitting(const string&) override;
     void FlipFirstCard();
 };
 
@@ -52,3 +54,5 @@ public:
     explicit Game(const vector<string>&);
     void Play();
 };
+
+void printPlayers(vector<Player>&);

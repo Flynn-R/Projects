@@ -4,7 +4,7 @@ using namespace std;
 
 // Class Card
 Card::Card(Suit suit, Value value, bool position) :
-cardSuit(suit), cardValue(value), isFaceUp(position) {}
+    cardSuit(suit), cardValue(value), isFaceUp(position) {}
 
 void Card::flip() { isFaceUp = !isFaceUp; }
 
@@ -26,7 +26,7 @@ int Hand::GetValue()
 {
     int sum = 0;
     int aceCount = 0;
-    for (auto & card : cards)
+    for (auto& card : cards)
     {
         if (card->isFaceUp)
         {

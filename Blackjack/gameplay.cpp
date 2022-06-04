@@ -5,65 +5,65 @@ ostream& operator<<(ostream& out, Card& card)
 {
     if (card.isFaceUp)
     {
-        switch(card.cardSuit)
+        switch (card.cardSuit)
         {
-            case Heart:
-                out << "Heart ";
-                break;
-            case Spade:
-                out << "Spade ";
-                break;
-            case Diamond:
-                out << "Diamond ";
-                break;
-            case Club:
-                out << "Club ";
-                break;
-            default:;
+        case Heart:
+            out << "Heart ";
+            break;
+        case Spade:
+            out << "Spade ";
+            break;
+        case Diamond:
+            out << "Diamond ";
+            break;
+        case Club:
+            out << "Club ";
+            break;
+        default:;
         }
 
-        switch(card.cardValue)
+        switch (card.cardValue)
         {
-            case Ace:
-                out << "Ace";
-                break;
-            case Two:
-                out << '2';
-                break;
-            case Three:
-                out << '3';
-                break;
-            case Four:
-                out << '4';
-                break;
-            case Five:
-                out << '5';
-                break;
-            case Six:
-                out << '6';
-                break;
-            case Seven:
-                out << '7';
-                break;
-            case Eight:
-                out << '8';
-                break;
-            case Nine:
-                out << '9';
-                break;
-            case Ten:
-                out << "10";
-                break;
-            case Jack:
-                out << "Jack";
-                break;
-            case Queen:
-                out << "Queen";
-                break;
-            case King:
-                out << "King";
-                break;
-            default:;
+        case Ace:
+            out << "Ace";
+            break;
+        case Two:
+            out << '2';
+            break;
+        case Three:
+            out << '3';
+            break;
+        case Four:
+            out << '4';
+            break;
+        case Five:
+            out << '5';
+            break;
+        case Six:
+            out << '6';
+            break;
+        case Seven:
+            out << '7';
+            break;
+        case Eight:
+            out << '8';
+            break;
+        case Nine:
+            out << '9';
+            break;
+        case Ten:
+            out << "10";
+            break;
+        case Jack:
+            out << "Jack";
+            break;
+        case Queen:
+            out << "Queen";
+            break;
+        case King:
+            out << "King";
+            break;
+        default:;
         }
     }
     else
@@ -133,29 +133,28 @@ void Deck::Deal(Hand& hand)
 
 void Deck::AdditionalCards(GenericPlayer& player)
 {
-    while(!player.IsBoosted() && player.IsHitting())
+    Deal(player);
+
+    if (player.IsBoosted())
     {
-        Deal(player);
-        cout << player << endl;
-
-        if (player.GetValue() == 21)
-            break;
-
-        if (player.IsBoosted())
-            player.Bust();
+        system("cls");
+        player.Bust();
+        system("pause");
     }
 }
 
 // Class Player
 Player::Player(string _name) : GenericPlayer(_name) {}
 
-bool Player::IsHitting()
+bool Player::IsHitting(const string& name)
 {
     string response;
 
     do
     {
-        cout << "Do you want a hit? (Y/N): ";
+        if (GetValue() == 21)
+            break;
+        cout << name << ". Do you want a hit? (Y/N): ";
         getline(cin, response);
 
         if (response.length() > 1)
@@ -171,16 +170,16 @@ bool Player::IsHitting()
     return false;
 }
 
-void Player::Win() const { cout << name << " wins!" << endl; }
+void Player::Win() const { cout << name << " wins!" << endl << endl; }
 
-void Player::Lose() const { cout << name << " loses!" << endl; }
+void Player::Lose() const { cout << name << " loses!" << endl << endl; }
 
-void Player::Push() const { cout << name << " pushed!" << endl; }
+void Player::Push() const { cout << name << " pushed!" << endl << endl; }
 
 // Class House
 House::House() : GenericPlayer("House") {}
 
-bool House::IsHitting() { return GetValue() <= 16; }
+bool House::IsHitting(const string& name = "") { return GetValue() <= 16; }
 
 void House::FlipFirstCard() { cards[0]->flip(); }
 
@@ -196,6 +195,7 @@ Game::Game(const vector<string>& player_names)
 
 void Game::Play()
 {
+    system("cls");
     for (auto& it : players)
     {
         deck.Deal(it);
@@ -207,21 +207,32 @@ void Game::Play()
     house.FlipFirstCard();
 
     for (auto& it : players)
-        cout << it << endl << endl;
-    cout << house << endl << endl;
-
-    for (auto& it : players)
-        deck.AdditionalCards(it);
+    {
+        system("cls");
+        cout << house << endl << endl;
+        printPlayers(players);
+        while (!it.IsBoosted() && it.IsHitting(it.name) && it.GetValue() != 21)
+        {
+            deck.AdditionalCards(it);
+            system("cls");
+            cout << house << endl << endl;
+            printPlayers(players);
+        }
+    }
     house.FlipFirstCard();
-    deck.AdditionalCards(house);
+    while (!house.IsBoosted() && house.IsHitting(house.name))
+        deck.AdditionalCards(house);
 
+    system("cls");
+    cout << house << endl;
     for (auto& it : players)
     {
+        cout << it << endl;
         if (!it.IsBoosted())
         {
-            if (it.GetValue() > house.GetValue())
+            if (it.GetValue() > house.GetValue() || house.IsBoosted() && !it.IsBoosted())
                 it.Win();
-            else if (house.GetValue() == it.GetValue())
+            else if (house.GetValue() == it.GetValue() || house.IsBoosted() && it.IsBoosted())
                 it.Push();
             else
                 it.Lose();
@@ -236,4 +247,10 @@ void Game::Play()
     house.Clear();
 
     system("pause");
+}
+
+void printPlayers(vector<Player>& players)
+{
+    for (auto& it : players)
+        cout << it << endl << endl;
 }
