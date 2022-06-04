@@ -203,8 +203,8 @@ void Game::Play()
     }
 
     deck.Deal(house);
-    house.FlipFirstCard();
     deck.Deal(house);
+    house.FlipFirstCard();
 
     for (auto& it : players)
         cout << it << endl << endl;

@@ -10,11 +10,12 @@ int main()
     Menu MainMenu(9);
     Menu PostGameMenu(3);
 
-    int selected = MainMenu.selection();
     do
     {
-        system("cls");
-        int numberOfPlayers = selected - 1;
+        int selected = MainMenu.selection();
+        int numberOfPlayers = 1;
+        if (selected != 1)
+            numberOfPlayers = selected - 1;
         cout << numberOfPlayers << " players" << endl;
         if (selected == 1)
         {
@@ -22,7 +23,7 @@ int main()
             for (int i = 0; i < numberOfPlayers; ++i)
             {
                 string name;
-                cin >> name;
+                getline(cin, name);
                 names.push_back(name);
             }
 
